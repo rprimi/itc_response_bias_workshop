@@ -3,7 +3,7 @@
 #### Workshop at International Testing Conference (ITC)
 Granada, Spain, July
 
-**Ricardo Primi & Felipe Valentin**  
+**Ricardo Primi & Felipe Valentini**  
 University of São Francisco, Campinas, Brazil & EduLab21 Ayrton Senna Institute
 
 #### Program
