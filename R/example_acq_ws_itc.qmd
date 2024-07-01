@@ -1,0 +1,171 @@
+---
+title: "Example of classical recoding for Acquiescence"
+format: html
+editor: visual
+---
+
+## Data, packages and functions
+
+- We will use data and functions from a packgae under construction called `noisecanceling`
+- In the coming month it will be published in github
+- Data is from SENNA a inventory for measuring Social-Emotional Skills in youth and adolescents
+
+
+```{r}
+source("http://www.labape.com.br/rprimi/R/recoding_functions.R")
+
+df <- readRDS("data_senna.RDS")
+dic <- readRDS("senna_dic.RDS")
+
+
+library(tidyverse) 
+
+```
+
+## Dictionnaire of items
+
+```{r}
+
+dic %>% glimpse
+
+```
+
+## Dataset and sample characteristics
+```{r}
+
+df %>% glimpse
+
+df %>% sjmisc::frq(age1)
+df %>% sjmisc::frq(Education)
+
+df %>% sjmisc::flat_table( age1, Education)
+
+```
+
+## Initial descriptives
+```{r}
+   source("item_histograms.R")
+
+  df %>% 
+   item_histograms(
+    coditems = dic$coditem, 
+    scales =  dic$scale,
+    poles =  dic$pole,
+    r_levels = c(1, 2, 3, 4, 5)
+    )
+
+  source("describe_likert.R")
+  
+ dic_ovcl <- dic %>% filter(scale == "OvCl")
+  
+ df  %>%
+ select( dic_ovcl$coditem) %>%
+ describe_likert(
+  coditem =  dic_ovcl$coditem, 
+  item_text = dic_ovcl$item_text, 
+  pole =  dic_ovcl$pole, 
+  item_location = 1:3, 
+  item_text_max = 36, 
+  center = 3,
+  categ_levels = c("1", "2",  "3", "4", "5")
+ )
+ 
+ 
+ dic_ovcl <- dic %>% filter(scale == "OvCl")
+  
+ df  %>%
+ select( dic_ovcl$coditem) %>%
+ describe_likert(
+  coditem =  dic_ovcl$coditem, 
+  item_text = dic_ovcl$item_text, 
+  pole =  dic_ovcl$pole, 
+  item_location = 1:3, 
+  item_text_max = 36, 
+  center = 3,
+  categ_levels = c("1", "2",  "3", "4", "5")
+ )
+  
+ 
+
+  dic_achv <- dic %>% filter(facet == "Achv")
+  
+ df  %>%
+ select(  dic_achv$coditem) %>%
+ describe_likert(
+  coditem =   dic_achv$coditem, 
+  item_text =  dic_achv$item_text, 
+  pole =   dic_achv$pole, 
+  item_location = 1:9, 
+  item_text_max = 36, 
+  center = 3,
+  categ_levels = c("1", "2",  "3", "4", "5")
+ )
+  
+```
+
+## Recoding 
+
+```{r}
+ 
+ df_recoded <- df %>% 
+    select(unique(dic$coditem)) %>% 
+    recode_for_acq( item_dic = dic)
+
+ df_recoded$data %>% skimr::skim()
+ df_recoded$data_acq_recoded %>% skimr::skim()
+ 
+ df_recoded$data_acq_recoded %>%
+  ggplot(aes(x = sv2.674)) +
+  geom_histogram(color = "white", bins = 10)
+ 
+ df_recoded$data %>%
+  ggplot(aes(x = sv2.674)) +
+  geom_histogram(color = "white", bins = 5)
+
+ df_recoded$acq_index %>% view()
+   
+```
+
+## Describing acq_index
+
+```{r}
+
+ df_recoded$acq_index %>% 
+     ggplot(aes(x = acq_index)) + 
+     geom_histogram(
+      aes(y=..density..), color="white", fill = "gray", 
+      binwidth = .25) +
+     scale_x_continuous(breaks = seq(1, 5, 1), limits = c(1, 5)) 
+
+
+```
+
+## Classical psychometric analysis
+```{r}
+
+  psicom <- find_psychometrics(df_recoded, likert = 5, center = 3)
+
+  save_item_psicom(psicom, filename = "psicom.xlsx")
+
+
+```
+
+## Item factor analysis
+```{r}
+  df_recoded$data %>% fa.parallel()
+
+  df_recoded$data_acq_recoded %>% fa.parallel()
+  
+  efa_o <- df_recoded$data   %>% fa(nfactors = 18, rotate = "varimax")
+  efa_acq <-df_recoded$data_acq_recoded %>% fa(nfactors = 18, rotate = "varimax")
+
+  source("http://www.labape.com.br/rprimi/R/save_loadings4.R") 
+  
+  save_loadings4(efa_o, item_dic = dic,
+     filename = "efa.xlsx", sheetName = "efa_o")
+  
+  save_loadings4(efa_acq, item_dic = dic,
+     filename = "efa.xlsx", sheetName = "efa_acq")
+  
+```
+
