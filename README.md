@@ -30,6 +30,8 @@ University of São Francisco, Campinas, Brazil & EduLab21 Ayrton Senna Institute
 
 Primi, R., Hauck-Filho, N., Valentini, F., & Santos, D. (2020). Classical Perspectives of Controlling Acquiescence with Balanced Scales. In M. Wiberg, D. Molenaar, J. González, U. Böckenholt, & J.-S. Kim (Eds.), _Quantitative Psychology Springer Proceedings in Mathematics & Statistics_ (pp. 333–345). Springer International Publishing. https://doi.org/10.1007/978-3-030-43469-4_25
 
+Primi, R., Hauck-Filho, N., & Valentini, F. (2023). Self-report and observer ratings: Item types, measurement challenges, and techniques of scoring. In J. Burrus, S. H. Rikoon, & M. W. Brenneman (Eds.), _Assessing competencies for social and emotional learning: Conceptualization, development, and applications_ (pp. 99–116). Routledge.
+
 
 * Primi, R. & Santos, D. (2018). Classical psychometric methods of acquiescence control with balanced scales. http://www.labape.com.br/acqu_mirt/methods_of_recoding.html   
 
